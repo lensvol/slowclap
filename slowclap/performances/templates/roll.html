@@ -1,14 +1,26 @@
 <html>
   <head>
     <title>Event roll</title>
+    <style>
+    body {
+        font-family: Helvetica Neue, Arial, sans-serif;
+    }
+
+    div.done {
+        text-decoration: line-through;
+        color: #d6d6d6;
+    }
+    </style>
   </head>
   <body>
     <div id="roll">
       <div v-repeat="blocks" v-component="event-block">
+        {{name}}
       </div>
     </div>
 
     <script language="JavaScript" src="/static/vue.js"></script>
+    <script language="JavaScript" src="/static/jquery-1.11.0.js"></script>
     <script language="JavaScript" src="/static/eventroll.js"></script>
   </body>
 </html>
