@@ -45,15 +45,6 @@ for(var i = 1; i < 10; i++){
 }
 
 var BlockComponent = Vue.extend({
-    template: '{{ name }}\
-        <br>\
-        <div \
-            class="{{ active ? \'\' : \'done\' }}" \
-            v-repeat="events" \
-            v-on="click: active = !active" \
-            v-component="event" \
-            id="event-{{ event_id }}">\
-        </div>',
     created: function(){
         this.$on('event-changed', function(){
             console.log('Recalculating...');
@@ -62,8 +53,7 @@ var BlockComponent = Vue.extend({
     }
 });
 
-var EventComponent = Vue.extend({
-    template: "{{ start | hourmin }} - {{ name }}",
+var EventComponent = Vue.extend({    
     created: function() {
         this.$on('status-changed', function(ev_id, is_active){
             if(ev_id == this.event_id){

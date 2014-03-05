@@ -1,26 +1,55 @@
 <html>
   <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://getbootstrap.com/dist/css/bootstrap.css" rel="stylesheet" type="text/css" />    
+
     <title>Event roll</title>
     <style>
     body {
         font-family: Helvetica Neue, Arial, sans-serif;
     }
 
-    div.done {
+    tr.done {
         text-decoration: line-through;
-        color: #d6d6d6;
+        color: red;
     }
+
+    td.event-start {
+        text-align: center;
+        width: 10%;
+    }
+
+    td.event-name {
+        
+    }    
     </style>
   </head>
   <body>
-    <div id="roll">
-      <div v-repeat="blocks" v-component="event-block">
-        {{name}}
+    {% verbatim %}
+    <div class="container">
+      <div id="roll">        
+        <div v-repeat="blocks" v-component="event-block">
+          <h2>{{ name }}</h2>
+          <table class="table table-condensed table-responsive table-bordered">
+            <thead>
+              <tr>
+                <th>Время начала</th>
+                <th>Наименование</th>
+              </tr>
+            </thead>          
+            <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ active ? '' : 'done' }}">
+              <td class="event-start">{{ start | hourmin }}</td>
+              <td class="event-name">{{ name }}</td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
+    {% endverbatim %}
 
     <script language="JavaScript" src="/static/vue.js"></script>
     <script language="JavaScript" src="/static/jquery-1.11.0.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.js"></script>
     <script language="JavaScript" src="/static/eventroll.js"></script>
   </body>
 </html>
