@@ -5,8 +5,9 @@ from django.db import models
 
 class ActionBlock(models.Model):
     name = models.CharField(max_length=255,
-                            verbose_name=u'Название')
-    start = models.DateTimeField(verbose_name=u'Начинается')
+                            verbose_name=u'Название',
+                            null=False)
+    start = models.DateTimeField(verbose_name=u'Начало')
 
     def __unicode__(self):
         return self.name
@@ -18,7 +19,8 @@ class ActionBlock(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=255,
-                            verbose_name=u'Название')
+                            verbose_name=u'Название',
+                            null=False)
 
     def __unicode__(self):
         return self.name
@@ -31,11 +33,15 @@ class Category(models.Model):
 class Event(models.Model):
     block = models.ForeignKey(ActionBlock, verbose_name=u'Блок')
     category = models.ForeignKey(Category, verbose_name=u'Категория')
-    name = models.CharField(max_length=255, verbose_name=u'Наименование')
-    length = models.IntegerField(verbose_name=u'Длина выступления (сек)')
+    description = models.CharField(max_length=255, 
+                                   verbose_name=u'Описание',
+                                   null=False,
+                                   default=u'(не указано)')
+    duration = models.IntegerField(verbose_name=u'Длина выступления (сек)',
+                                   default=0)
 
     def __unicode__(self):
-        return self.name
+        return self.description
 
     class Meta:
         verbose_name = u'Событие'
