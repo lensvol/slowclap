@@ -83,7 +83,7 @@ var roll = new Vue({
     methods: {
         set_active: function(ev_id, is_active){
             this.$broadcast('status-changed', ev_id, is_active)
-            $('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
+            //$('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
         }
     }
 });
