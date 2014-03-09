@@ -6,8 +6,9 @@ function EventBlock(name, start, events) {
     this.recalculate();
 };
 
-function Event(event_id, name, duration) {
+function Event(event_id, category, name, duration) {
     this.name = name;
+    this.category = category;
     this.event_id = event_id;
     this.duration = duration;
     this.active = true;
@@ -24,24 +25,6 @@ EventBlock.prototype = {
             }
         }
     }
-}
-
-
-var event_blocks = [];
-
-for(var i = 1; i < 10; i++){
-    var new_events = []
-
-    for(var a = 1; a < 31; a++){
-        new_events.push(new Event(
-            i + "_" + a, 
-            "Event #" + i + "-" + a,
-            120))
-    }
-    event_blocks.push(new EventBlock(
-        "Block #" + i, 
-        new Date(2014, 3, 30, 10 + i, 0, 0),
-        new_events))
 }
 
 var BlockComponent = Vue.extend({
@@ -75,15 +58,53 @@ Vue.filter('hourmin', function(value){
            (minutes < 10 ? "0" + minutes : minutes)
 })
 
-var roll = new Vue({
-    el: "#roll",
-    data: {
-        blocks: event_blocks
-    },
-    methods: {
-        set_active: function(ev_id, is_active){
-            this.$broadcast('status-changed', ev_id, is_active)
-            //$('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
-        }
+/*
+for(var i = 1; i < 10; i++){
+    var new_events = []
+
+    for(var a = 1; a < 31; a++){
+        new_events.push(new Event(
+            i + "_" + a, 
+            "Event #" + i + "-" + a,
+            120))
     }
-});
+    event_blocks.push(new EventBlock(
+        "Block #" + i, 
+        new Date(2014, 3, 30, 10 + i, 0, 0),
+        new_events))
+}
+*/
+
+$.ajax('/performances', {
+    success: function(data){
+        var events_by_block = {}
+        var blocks = {}
+
+        for(var i = 0; i < data.length; i++){
+            var cur_ev = data[i];
+            //console.log(data[i].block.id);
+
+            if(cur_ev.block.id in events_by_block){
+                events_by_block[cur_ev.block.id].push(
+                    new Event(cur_ev.id, 
+                              cur_ev.category ? cur_ev.category.name : "", 
+                              cur_ev.description, cur_ev.duration));
+            }else{
+                events_by_block[cur_ev.block.id] = [];
+            }
+        }
+
+        // var roll = new Vue({
+        //     el: "#roll",
+        //     data: {
+        //         blocks: event_blocks
+        //     },
+        //     methods: {
+        //         set_active: function(ev_id, is_active){
+        //             this.$broadcast('status-changed', ev_id, is_active)
+        //             //$('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
+        //         }
+        //     }
+        // });
+
+    }});
