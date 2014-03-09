@@ -12,6 +12,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         lines = []
+        events_in_block = {}
 
         csv_fn, start_date = args        
         with open(csv_fn, 'rb') as fp:
@@ -36,11 +37,14 @@ class Command(BaseCommand):
 
             duration_sec = float(duration.replace(',', '.')) * 60
 
+            cur_ord = events_in_block.get(block, 0) + 1
             event, cr = Event.objects.get_or_create(category=category_rec,
                                                     block=block_rec,
-                                                    ord=pos or None,
+                                                    ord=cur_ord,
                                                     duration=duration_sec,
                                                     description=name.replace(u'\n', u' / '))
+            events_in_block[block] = cur_ord
+
             event.save()
             if cr:
                 count += 1
