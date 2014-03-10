@@ -11,5 +11,6 @@ urlpatterns = patterns('',
     url(r'roll', event_roll),
     url(r'list/events$', EventList.as_view()),
     url(r'list/blocks$', BlockList.as_view()),
-    url(r'list/categories$', CategoryList.as_view())
+    url(r'list/categories$', CategoryList.as_view()),
+    url(r'list/program$', list_program)
 )

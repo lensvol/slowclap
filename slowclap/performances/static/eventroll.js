@@ -75,36 +75,88 @@ for(var i = 1; i < 10; i++){
 }
 */
 
-$.ajax('/performances', {
-    success: function(data){
-        var events_by_block = {}
-        var blocks = {}
 
-        for(var i = 0; i < data.length; i++){
-            var cur_ev = data[i];
-            //console.log(data[i].block.id);
+function loadProgram(){
+    var self = this;
 
-            if(cur_ev.block.id in events_by_block){
-                events_by_block[cur_ev.block.id].push(
-                    new Event(cur_ev.id, 
-                              cur_ev.category ? cur_ev.category.name : "", 
-                              cur_ev.description, cur_ev.duration));
-            }else{
-                events_by_block[cur_ev.block.id] = [];
+    $.ajax('/performances/list/blocks', {
+        success: function(blocks){
+            self.blocks = {};
+            for(var bl_id = 0; bl_id < blocks.length; bl_id++){
+                self.blocks[blocks[bl_id].id] = blocks[bl_id];
             }
+
+            $.ajax('/performances/list/categories', {
+                success: function(categories){
+                    self.categories = {};
+            
+                    for(var cat_id = 0; cat_id < categories.length; cat_id++){
+                        self.categories[categories[cat_id].id] = categories[cat_id];
+                    }
+
+                    $.ajax('/performances/list/events', {
+                        success: function(events){
+                            self.events = {};
+                            for(var i= 0; i < events.length; i++){
+                                ev = events[i];
+                                self.events[ev.id] = new Event(
+                                    "event_" + ev.id,
+                                    ev.category_id,
+                                    ev.description,
+                                    ev.duration);
+                            }
+                            $.ajax('/performances/list/program', {
+                                 success: function(by_blocks){
+                                    event_blocks = [];
+                                    var by_start_date = function(a, b){
+                                        return a.start - b.start
+                                    }
+                                    for(key in by_blocks){
+                                        if(by_blocks.hasOwnProperty(key)){
+                                            console.log(key);
+                                            block_def = self.blocks[key];
+                                            var in_block = [];
+                                            var event_ids = by_blocks[key];
+                                            for(var b_i = 0; b_i < event_ids.length; b_i++){
+                                                in_block.push(self.events[event_ids[b_i]]);
+                                            }
+                                            event_blocks.push(new EventBlock(
+                                                block_def.name,
+                                                block_def.start,
+                                                in_block));
+                                        }
+                                    }
+                                    event_blocks = event_blocks.sort(by_start_date);
+                                    var roll = new Vue({
+                                        el: "#roll",
+                                        data: {
+                                            blocks: event_blocks
+                                        }});
+
+                                }});
+                        }
+                    });
+                    // $.ajax('/performances/list/program', {
+                    //     success: function(program){
+                    //         // var roll = new Vue({
+                    //         //     el: "#roll",
+                    //         //     data: {
+                    //         //         blocks: event_blocks
+                    //         //     },
+                    //         //     methods: {
+                    //         //         set_active: function(ev_id, is_active){
+                    //         //             this.$broadcast('status-changed', ev_id, is_active)
+                    //         //             //$('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
+                    //         //         }
+                    //         //     }
+                    //         // });
+
+                    //     }});
+
+                }
+            });
         }
+    });
+}
 
-        // var roll = new Vue({
-        //     el: "#roll",
-        //     data: {
-        //         blocks: event_blocks
-        //     },
-        //     methods: {
-        //         set_active: function(ev_id, is_active){
-        //             this.$broadcast('status-changed', ev_id, is_active)
-        //             //$('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
-        //         }
-        //     }
-        // });
-
-    }});
+loadProgram();
