@@ -101,7 +101,7 @@ function loadProgram(){
                                 ev = events[i];
                                 self.events[ev.id] = new Event(
                                     "event_" + ev.id,
-                                    ev.category_id,
+                                    ev.category ? ev.category.name : "(неизвестно)",
                                     ev.description,
                                     ev.duration);
                             }
