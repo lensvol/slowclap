@@ -1,4 +1,4 @@
-function EventBlock(name, start, events) {
+function EventBlock(name,  start, events) {
     this.name = name;
     this.start = start;
     this.events = events;
@@ -101,7 +101,7 @@ function loadProgram(){
                                 ev = events[i];
                                 self.events[ev.id] = new Event(
                                     "event_" + ev.id,
-                                    ev.category ? ev.category.name : "(неизвестно)",
+                                    ev.category ? ev.category.name : "",
                                     ev.description,
                                     ev.duration);
                             }
