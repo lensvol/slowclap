@@ -3,6 +3,8 @@ function EventBlock(name,  start, events) {
     this.start = start;
     this.events = events;
 
+    this.filtered_out = false;
+
     this.recalculate();
 };
 
@@ -38,15 +40,23 @@ var BlockComponent = Vue.extend({
             var flt = this.$root.selected;
 
             this.events.replace(function(item){
-                if(item.category == flt.category){
+                if(item.category == flt.category || !flt.category){
                     item.hidden = false;
                     return item;
                 }
                 item.hidden = true;
-                return item;
+                return item;                
             });
+
+            var count = this.events.length;
+            for(var i = 0; i < this.events.length; i++){
+                if(this.events[i].hidden){
+                    count--;
+                }
+            }
+            this.filtered_out = count == 0;
         });
-    }
+    },
 });
 
 var EventComponent = Vue.extend({    
@@ -130,7 +140,10 @@ $(document).ready(function(){
                         methods: {
                             setCategoryFilter: function(value){
                                 this.selected.category = value.name;
-                            }
+                            },
+                            clearCategoryFilter: function(){
+                                this.selected.category = null;
+                            }                            
                         },
                         ready: function(){
                             console.log('Ok!');
