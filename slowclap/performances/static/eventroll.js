@@ -44,7 +44,7 @@ var EventComponent = Vue.extend({
                 console.log("Found on " + this.event_id);
                 this.$dispatch('event-changed');
             }
-        })
+        });
     }
 });
 
@@ -104,10 +104,20 @@ $(document).ready(function(){
                         }
                     }
                     event_blocks = event_blocks.sort(by_start_date);
+
                     roll = new Vue({
                         el: "#roll",
                         data: {
                             blocks: event_blocks,
+                            categories: self.categories,
+                            selected: {
+                                category: null
+                            }
+                        },
+                        methods: {
+                            setCategoryFilter: function(value){
+                                this.selected.category = value.name;
+                            }
                         },
                         ready: function(){
                             console.log('Ok!');
