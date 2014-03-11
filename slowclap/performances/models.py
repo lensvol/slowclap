@@ -50,5 +50,5 @@ class Event(models.Model):
         return self.description
 
     class Meta:
-        verbose_name = u'Событие'
-        verbose_name_plural = u'События'
+        verbose_name = u'Выступление'
+        verbose_name_plural = u'Выступления'
