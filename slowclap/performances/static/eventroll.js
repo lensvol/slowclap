@@ -12,6 +12,7 @@ function Event(event_id, category, name, duration) {
     this.event_id = event_id;
     this.duration = duration;
     this.active = true;
+    this.hidden = false;
 };
 
 EventBlock.prototype = {
@@ -32,6 +33,18 @@ var BlockComponent = Vue.extend({
         this.$on('event-changed', function(){
             console.log('Recalculating...');
             this.recalculate();
+        });
+        this.$on('filter-changed', function(){
+            var flt = this.$root.selected;
+
+            this.events.replace(function(item){
+                if(item.category == flt.category){
+                    item.hidden = false;
+                    return item;
+                }
+                item.hidden = true;
+                return item;
+            });
         });
     }
 });
@@ -123,6 +136,10 @@ $(document).ready(function(){
                             console.log('Ok!');
                             $("#placeholder").hide();
                             $('#roll').show();
+                            this.$watch('selected', function(){
+                                console.log('Selection changed.');
+                                this.$broadcast('filter-changed');
+                            })
                         } 
                     });
                 }});

@@ -21,7 +21,12 @@
 
     td.event-name {
         
-    }    
+    }
+
+    tr.hidden {
+      display: none;
+      visibility: hidden;
+    }
     </style>
   </head>
   <body>
@@ -53,7 +58,7 @@
                 <th>Наименование</th>
               </tr>
             </thead>
-            <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ active ? '' : 'done' }}">
+            <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
               <td class="event-category">{{ category }}</td>
               <td class="event-start">{{ start | hourmin }}</td>
               <td class="event-name">{{ name }}</td>
