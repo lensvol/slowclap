@@ -26,8 +26,9 @@
   </head>
   <body>
     {% verbatim %}
+    <div id="placeholder">Подождите, выполняется загрузка программы...</div>
     <div class="container">
-      <div id="roll">        
+      <div id="roll" style="display: none">
         <div v-repeat="blocks" v-component="event-block">
           <h2>{{ name }}</h2>
           <table class="table table-condensed table-responsive table-bordered">

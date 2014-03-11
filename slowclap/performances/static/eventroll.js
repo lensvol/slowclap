@@ -58,26 +58,10 @@ Vue.filter('hourmin', function(value){
            (minutes < 10 ? "0" + minutes : minutes)
 })
 
-/*
-for(var i = 1; i < 10; i++){
-    var new_events = []
 
-    for(var a = 1; a < 31; a++){
-        new_events.push(new Event(
-            i + "_" + a, 
-            "Event #" + i + "-" + a,
-            120))
-    }
-    event_blocks.push(new EventBlock(
-        "Block #" + i, 
-        new Date(2014, 3, 30, 10 + i, 0, 0),
-        new_events))
-}
-*/
-
-
-function loadProgram(){
+$(document).ready(function(){
     var self = this;
+    console.log('ready');
 
     $.ajax('/performances/list/blocks', {
         success: function(blocks){
@@ -131,32 +115,19 @@ function loadProgram(){
                                         el: "#roll",
                                         data: {
                                             blocks: event_blocks
-                                        }});
-
+                                        },
+                                        ready: function(){
+                                            console.log('Ok!');
+                                            $("#placeholder").hide();
+                                            $('#roll').show();
+                                        } 
+                                    });
                                 }});
                         }
                     });
-                    // $.ajax('/performances/list/program', {
-                    //     success: function(program){
-                    //         // var roll = new Vue({
-                    //         //     el: "#roll",
-                    //         //     data: {
-                    //         //         blocks: event_blocks
-                    //         //     },
-                    //         //     methods: {
-                    //         //         set_active: function(ev_id, is_active){
-                    //         //             this.$broadcast('status-changed', ev_id, is_active)
-                    //         //             //$('html,body').animate({scrollTop:$("#event-" + ev_id).offset().top}, 500);
-                    //         //         }
-                    //         //     }
-                    //         // });
-
-                    //     }});
 
                 }
             });
         }
     });
-}
-
-loadProgram();
+});
