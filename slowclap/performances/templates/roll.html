@@ -26,7 +26,7 @@
   </head>
   <body>
     {% verbatim %}
-    <div id="placeholder">Подождите, выполняется загрузка программы...</div>
+    <div id="placeholder" style="display: none">Подождите, выполняется загрузка программы...</div>
     <div class="container">
       <div id="roll" style="display: none">
         <div v-repeat="blocks" v-component="event-block">
@@ -38,7 +38,7 @@
                 <th>Время начала</th>
                 <th>Наименование</th>
               </tr>
-            </thead>          
+            </thead>
             <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ active ? '' : 'done' }}">
               <td class="event-category">{{ category }}</td>
               <td class="event-start">{{ start | hourmin }}</td>
