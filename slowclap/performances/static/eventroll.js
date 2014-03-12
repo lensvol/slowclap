@@ -135,9 +135,9 @@ $(document).ready(function(){
                         data: {
                             blocks: event_blocks,
                             categories: self.categories,
-                            text_filter: 'аниме',
+                            text_filter: null,
                             filter_by: {
-                                category: null,
+                                category: 'Все категории',
                                 text: null
                             }
                         },
@@ -146,7 +146,7 @@ $(document).ready(function(){
                                 this.filter_by.category = value.name;
                             },
                             clearCategoryFilter: function(){
-                                this.filter_by.category = null;
+                                this.filter_by.category = 'Все категории';
                             },
                             filterByText: function(){
                                 this.filter_by.text = this.text_filter;
