@@ -37,14 +37,16 @@ var BlockComponent = Vue.extend({
             this.recalculate();
         });
         this.$on('filter-changed', function(){
-            var flt = this.$root.selected;
+            var flt = this.$root.filter_by;
 
             this.events.replace(function(item){
-                if(item.category == flt.category || !flt.category){
+                if((flt.category && flt.category != item.category)
+                    || (flt.text && item.name.toLowerCase().indexOf(flt.text.toLowerCase()) == -1))
+                {
+                    item.hidden = true;
+                }else{
                     item.hidden = false;
-                    return item;
                 }
-                item.hidden = true;
                 return item;                
             });
 
@@ -133,24 +135,29 @@ $(document).ready(function(){
                         data: {
                             blocks: event_blocks,
                             categories: self.categories,
-                            selected: {
-                                category: null
+                            text_filter: 'аниме',
+                            filter_by: {
+                                category: null,
+                                text: null
                             }
                         },
                         methods: {
                             setCategoryFilter: function(value){
-                                this.selected.category = value.name;
+                                this.filter_by.category = value.name;
                             },
                             clearCategoryFilter: function(){
-                                this.selected.category = null;
-                            }                            
+                                this.filter_by.category = null;
+                            },
+                            filterByText: function(){
+                                this.filter_by.text = this.text_filter;
+                            }
                         },
                         ready: function(){
                             console.log('Ok!');
                             $("#placeholder").hide();
                             $('#roll').show();
-                            this.$watch('selected', function(){
-                                console.log('Selection changed.');
+                            this.$watch('filter_by', function(){
+                                console.log('Filter changed:' + this.filter_by.text + ' in ' + this.filter_by.category);
                                 this.$broadcast('filter-changed');
                             })
                         } 
