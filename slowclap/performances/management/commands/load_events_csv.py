@@ -3,6 +3,7 @@
 import csv
 import datetime
 from django.core.management.base import BaseCommand, CommandError
+from django.utils.timezone import get_current_timezone
 
 from slowclap.performances.models import Category, ActionBlock, Event
 
@@ -13,6 +14,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         lines = []
         events_in_block = {}
+        tz = get_current_timezone()
 
         csv_fn, start_date = args        
         with open(csv_fn, 'rb') as fp:
@@ -26,7 +28,7 @@ class Command(BaseCommand):
             else:
                 category_rec = None
 
-            start = datetime.datetime.strptime(start_date, '%d.%m.%Y')
+            start = datetime.datetime.strptime(start_date, '%d.%m.%Y').replace(tzinfo=tz)
             start += datetime.timedelta(days=int(day)-1)
             
             if block:
