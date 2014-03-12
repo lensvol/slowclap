@@ -3,6 +3,8 @@ function EventBlock(name,  start, events) {
     this.start = start;
     this.events = events;
 
+    this.filtered_out = false;
+
     this.recalculate();
 };
 
@@ -12,6 +14,7 @@ function Event(event_id, category, name, duration) {
     this.event_id = event_id;
     this.duration = duration;
     this.active = true;
+    this.hidden = false;
 };
 
 EventBlock.prototype = {
@@ -33,7 +36,29 @@ var BlockComponent = Vue.extend({
             console.log('Recalculating...');
             this.recalculate();
         });
-    }
+        this.$on('filter-changed', function(){
+            var flt = this.$root.filter_by;
+
+            this.events.replace(function(item){
+                if((flt.category && flt.category != item.category)
+                    || (flt.text && item.name.toLowerCase().indexOf(flt.text.toLowerCase()) == -1))
+                {
+                    item.hidden = true;
+                }else{
+                    item.hidden = false;
+                }
+                return item;                
+            });
+
+            var count = this.events.length;
+            for(var i = 0; i < this.events.length; i++){
+                if(this.events[i].hidden){
+                    count--;
+                }
+            }
+            this.filtered_out = count == 0;
+        });
+    },
 });
 
 var EventComponent = Vue.extend({    
@@ -44,7 +69,7 @@ var EventComponent = Vue.extend({
                 console.log("Found on " + this.event_id);
                 this.$dispatch('event-changed');
             }
-        })
+        });
     }
 });
 
@@ -58,76 +83,86 @@ Vue.filter('hourmin', function(value){
            (minutes < 10 ? "0" + minutes : minutes)
 })
 
+var roll = null;
 
 $(document).ready(function(){
     var self = this;
-    console.log('ready');
+    $("#placeholder").show();
 
-    $.ajax('/performances/list/blocks', {
-        success: function(blocks){
+    $.ajax('/performances/list/events', {
+        success: function(events){
+            self.events = {};
             self.blocks = {};
-            for(var bl_id = 0; bl_id < blocks.length; bl_id++){
-                self.blocks[blocks[bl_id].id] = blocks[bl_id];
-            }
+            self.categories = {};
 
-            $.ajax('/performances/list/categories', {
-                success: function(categories){
-                    self.categories = {};
-            
-                    for(var cat_id = 0; cat_id < categories.length; cat_id++){
-                        self.categories[categories[cat_id].id] = categories[cat_id];
-                    }
+            for(var i= 0; i < events.length; i++){
+                ev = events[i];
+                self.events[ev.id] = new Event(
+                    "event_" + ev.id,
+                    ev.category ? ev.category.name : "",
+                    ev.description,
+                    ev.duration);
 
-                    $.ajax('/performances/list/events', {
-                        success: function(events){
-                            self.events = {};
-                            for(var i= 0; i < events.length; i++){
-                                ev = events[i];
-                                self.events[ev.id] = new Event(
-                                    "event_" + ev.id,
-                                    ev.category ? ev.category.name : "",
-                                    ev.description,
-                                    ev.duration);
-                            }
-                            $.ajax('/performances/list/program', {
-                                 success: function(by_blocks){
-                                    event_blocks = [];
-                                    var by_start_date = function(a, b){
-                                        return a.start - b.start
-                                    }
-                                    for(key in by_blocks){
-                                        if(by_blocks.hasOwnProperty(key)){
-                                            console.log(key);
-                                            block_def = self.blocks[key];
-                                            var in_block = [];
-                                            var event_ids = by_blocks[key];
-                                            for(var b_i = 0; b_i < event_ids.length; b_i++){
-                                                in_block.push(self.events[event_ids[b_i]]);
-                                            }
-                                            event_blocks.push(new EventBlock(
-                                                block_def.name,
-                                                block_def.start,
-                                                in_block));
-                                        }
-                                    }
-                                    event_blocks = event_blocks.sort(by_start_date);
-                                    var roll = new Vue({
-                                        el: "#roll",
-                                        data: {
-                                            blocks: event_blocks
-                                        },
-                                        ready: function(){
-                                            console.log('Ok!');
-                                            $("#placeholder").hide();
-                                            $('#roll').show();
-                                        } 
-                                    });
-                                }});
-                        }
-                    });
-
+                if(ev.category){
+                    self.categories[ev.category.id] = ev.category;
                 }
-            });
+
+                if(ev.block){
+                    self.blocks[ev.block.id] = ev.block;
+                }
+            }
+            $.ajax('/performances/list/program', {
+                 success: function(by_blocks){
+                    event_blocks = [];
+                    var by_start_date = function(a, b){
+                        return a.start - b.start
+                    }
+                    for(key in by_blocks){
+                        if(by_blocks.hasOwnProperty(key)){                                            
+                            block_def = self.blocks[key];
+                            var in_block = [];
+                            var event_ids = by_blocks[key];
+                            for(var b_i = 0; b_i < event_ids.length; b_i++){
+                                in_block.push(self.events[event_ids[b_i]]);
+                            }
+                            event_blocks.push(new EventBlock(block_def.name, block_def.start, in_block));
+                        }
+                    }
+                    event_blocks = event_blocks.sort(by_start_date);
+
+                    roll = new Vue({
+                        el: "#roll",
+                        data: {
+                            blocks: event_blocks,
+                            categories: self.categories,
+                            text_filter: null,
+                            filter_by: {
+                                category: 'Все категории',
+                                text: null
+                            }
+                        },
+                        methods: {
+                            setCategoryFilter: function(value){
+                                this.filter_by.category = value.name;
+                            },
+                            clearCategoryFilter: function(){
+                                this.filter_by.category = 'Все категории';
+                            },
+                            filterByText: function(){
+                                this.filter_by.text = this.text_filter;
+                            }
+                        },
+                        ready: function(){
+                            console.log('Ok!');
+                            $("#placeholder").hide();
+                            $('#roll').show();
+                            this.$watch('filter_by', function(){
+                                console.log('Filter changed:' + this.filter_by.text + ' in ' + this.filter_by.category);
+                                this.$broadcast('filter-changed');
+                            })
+                        } 
+                    });
+                }});
         }
     });
 });

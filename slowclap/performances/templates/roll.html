@@ -21,15 +21,42 @@
 
     td.event-name {
         
-    }    
+    }
+
+    .hidden {
+      display: none;
+      visibility: hidden;
+    }
     </style>
   </head>
   <body>
     {% verbatim %}
-    <div id="placeholder">Подождите, выполняется загрузка программы...</div>
+    <div id="placeholder" style="display: none">Подождите, выполняется загрузка программы...</div>
+
     <div class="container">
       <div id="roll" style="display: none">
-        <div v-repeat="blocks" v-component="event-block">
+        <nav class="navbar navbar-default" role="navigation">
+          <div class="collapse navbar-collapse" id="filter-navbar">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span v-text="filter_by.category"></span> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#" v-on="click:clearCategoryFilter()"></a></li>
+                  <li v-repeat="categories"><a href="#" v-on="click:setCategoryFilter(this)">{{name}}</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search" v-on="submit:filterByText(this)">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Поиск" v-model="text_filter">
+              </div>
+              <button type="submit" class="btn btn-default">Поиск</button>
+            </form>
+
+          </div>
+        </nav>
+
+        <div v-repeat="blocks" v-component="event-block" class="{{ filtered_out ? 'hidden' : ''}}">
           <h2>{{ name }}</h2>
           <table class="table table-condensed table-responsive table-bordered">
             <thead>
@@ -38,8 +65,8 @@
                 <th>Время начала</th>
                 <th>Наименование</th>
               </tr>
-            </thead>          
-            <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ active ? '' : 'done' }}">
+            </thead>
+            <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
               <td class="event-category">{{ category }}</td>
               <td class="event-start">{{ start | hourmin }}</td>
               <td class="event-name">{{ name }}</td>
