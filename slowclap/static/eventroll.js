@@ -40,7 +40,7 @@ var BlockComponent = Vue.extend({
             var flt = this.$root.filter_by;
 
             this.events.replace(function(item){
-                if((flt.category && flt.category != item.category)
+                if((flt.category && flt.category != item.category && flt.category != 'Все категории')
                     || (flt.text && item.name.toLowerCase().indexOf(flt.text.toLowerCase()) == -1))
                 {
                     item.hidden = true;
