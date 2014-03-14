@@ -89,7 +89,7 @@ $(document).ready(function(){
     var self = this;
     $("#placeholder").show();
 
-    $.ajax('/performances/list/events', {
+    $.ajax('list/events', {
         success: function(events){
             self.events = {};
             self.blocks = {};
@@ -111,7 +111,7 @@ $(document).ready(function(){
                     self.blocks[ev.block.id] = ev.block;
                 }
             }
-            $.ajax('/performances/list/program', {
+            $.ajax('list/program', {
                  success: function(by_blocks){
                     event_blocks = [];
                     var by_start_date = function(a, b){
