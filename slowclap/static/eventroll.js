@@ -118,7 +118,7 @@ $(document).ready(function(){
                         return a.start - b.start
                     }
                     for(key in by_blocks){
-                        if(by_blocks.hasOwnProperty(key)){                                            
+                        if(self.blocks.hasOwnProperty(key)){
                             block_def = self.blocks[key];
                             var in_block = [];
                             var event_ids = by_blocks[key];
