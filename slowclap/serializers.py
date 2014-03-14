@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from slowclap.performances.models import Event, Category, ActionBlock 
+from slowclap.models import Event, Category, ActionBlock 
 
 
 class ActionBlockSerializer(serializers.ModelSerializer):

@@ -5,8 +5,8 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 
 from rest_framework import generics
-from slowclap.performances.models import Event, ActionBlock
-from slowclap.performances.serializers import *
+from slowclap.models import Event, ActionBlock
+from slowclap.serializers import *
 
 
 def event_roll(request):

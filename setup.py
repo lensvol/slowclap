@@ -20,15 +20,16 @@ setup(
     description='Simple event listing app.',
     author='Kirill Borisov',
     author_email='borisov@bars-open.ru',
-    url='https://bitbucket.org/lensvol/slowclap',
+    url='https://github.com/lensvol/slowclap',
     packages=[
         'slowclap',
-	'slowclap.performances'
+        'slowclap.migrations',
+        'slowclap.management.commands'
     ],
     package_dir={'slowclap': 'slowclap'},
     include_package_data=True,
     install_requires=[
-	'Django>=1.5.5',
+	    'Django>=1.5.5',
         'south',
         'djangorestframework',
         'markdown',

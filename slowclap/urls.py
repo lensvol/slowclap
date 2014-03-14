@@ -1,12 +1,16 @@
+#coding: utf-8
+
 from django.conf.urls import patterns, include, url
 
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.contrib import admin
-admin.autodiscover()
+from slowclap.views import *
 
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'slowclap.views.home', name='home'),
-    url(r'^performances/', include('slowclap.performances.urls')),
-    url(r'^admin/', include(admin.site.urls)),
-) + staticfiles_urlpatterns()
+
+    url(r'roll', event_roll),
+    url(r'list/events$', EventList.as_view()),
+    url(r'list/blocks$', BlockList.as_view()),
+    url(r'list/categories$', CategoryList.as_view()),
+    url(r'list/program$', list_program)
+)
