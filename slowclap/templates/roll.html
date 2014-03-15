@@ -1,7 +1,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/static/bootstrap.css" rel="stylesheet" type="text/css" />    
+    <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css" />
 
     <title>Event roll</title>
     <style>
@@ -19,14 +19,23 @@
         width: 10%;
     }
 
-    td.event-name {
-        
-    }
-
     .hidden {
       display: none;
       visibility: hidden;
     }
+
+    .panel-heading .accordion-toggle:after {
+        /* symbol for "opening" panels */
+        font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+        content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+        float: right;        /* adjust as needed */
+        color: grey;         /* adjust as needed */
+    }
+    .panel-heading .accordion-toggle.collapsed:after {
+        /* symbol for "collapsed" panels */
+        content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+    }
+
     </style>
   </head>
   <body>
@@ -56,30 +65,42 @@
           </div>
         </nav>
 
-        <div v-repeat="blocks" v-component="event-block" class="{{ filtered_out ? 'hidden' : ''}}">
-          <h2>{{ name }}</h2>
-          <table class="table table-condensed table-responsive table-bordered">
-            <thead>
-              <tr>
-                <th>Категория</th>
-                <th>Время начала</th>
-                <th>Наименование</th>
-              </tr>
-            </thead>
-            <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
-              <td class="event-category">{{ category }}</td>
-              <td class="event-start">{{ start | hourmin }}</td>
-              <td class="event-name">{{ name }}</td>
-            </tr>
-          </table>
+        <div class="panel-group accordion">
+          <div v-repeat="blocks" v-component="event-block" class="{{ filtered_out ? 'hidden' : ''}}">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">{{ name }}</a>
+                </h4>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table class="table table-condensed table-responsive table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Категория</th>
+                        <th>Время начала</th>
+                        <th>Наименование</th>
+                      </tr>
+                    </thead>
+                    <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
+                      <td class="event-category">{{ category }}</td>
+                      <td class="event-start">{{ start | hourmin }}</td>
+                      <td class="event-name">{{ name }}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     {% endverbatim %}
 
-    <script language="JavaScript" src="/static/vue.js"></script>
-    <script language="JavaScript" src="/static/jquery-1.11.0.js"></script>
-    <script language="JavaScript" src="/static/bootstrap.js"></script>
+    <script language="JavaScript" src="/static/js/vue.js"></script>
+    <script language="JavaScript" src="/static/js/jquery-1.11.0.js"></script>
+    <script language="JavaScript" src="/static/js/bootstrap.js"></script>
     <script language="JavaScript" src="/static/eventroll.js"></script>
   </body>
 </html>
