@@ -39,6 +39,11 @@
     </style>
   </head>
   <body>
+    <div id="noscript">
+    К сожалению, ваш браузер не поддерживает Javascript. Для просмотра программы
+    вам необходимо перейти <a href="{% url 'slowclap.views.noscript_roll' %}">по этой ссылке</a>.
+    </div>
+
     {% verbatim %}
     <div id="placeholder" style="display: none">Подождите, выполняется загрузка программы...</div>
 
