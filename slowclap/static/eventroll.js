@@ -1,7 +1,8 @@
-function EventBlock(name,  start, events) {
+function EventBlock(block_id, name,  start, events) {
     this.name = name;
     this.start = start;
     this.events = events;
+    this.block_id = block_id
 
     this.filtered_out = false;
 
@@ -130,7 +131,7 @@ $(document).ready(function(){
                             for(var b_i = 0; b_i < event_ids.length; b_i++){
                                 in_block.push(self.events[event_ids[b_i]]);
                             }
-                            event_blocks.push(new EventBlock(block_def.name, block_def.start, in_block));
+                            event_blocks.push(new EventBlock(key, block_def.name, block_def.start, in_block));
                         }
                     }
                     event_blocks = event_blocks.sort(by_start_date);
