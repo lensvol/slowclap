@@ -8,11 +8,13 @@ function EventBlock(name,  start, events) {
     this.recalculate();
 };
 
-function Event(event_id, category, name, duration) {
+function Event(event_id, category, name, duration, number) {
     this.name = name;
     this.category = category;
     this.event_id = event_id;
     this.duration = duration;
+    this.number = number;
+
     this.active = true;
     this.hidden = false;
 };
@@ -102,7 +104,9 @@ $(document).ready(function(){
                     "event_" + ev.id,
                     ev.category ? ev.category.name : "",
                     ev.description,
-                    ev.duration);
+                    ev.duration,
+                    ev.number
+                );
 
                 if(ev.category){
                     self.categories[ev.category.id] = ev.category;

@@ -86,12 +86,14 @@
                         <th>Категория</th>
                         <th>Время начала</th>
                         <th>Наименование</th>
+                        <th>Номер в конкурсе</th>
                       </tr>
                     </thead>
                     <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
                       <td class="event-category">{{ category }}</td>
                       <td class="event-start">{{ start | hourmin }}</td>
                       <td class="event-name">{{ name }}</td>
+                      <td class="event-number">{{ number }}</td>
                     </tr>
                   </table>
                 </div>
