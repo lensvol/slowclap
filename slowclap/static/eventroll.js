@@ -47,7 +47,7 @@ var BlockComponent = Vue.extend({
                 }else{
                     item.hidden = false;
                 }
-                return item;                
+                return item;
             });
 
             var count = this.events.length;
@@ -61,7 +61,7 @@ var BlockComponent = Vue.extend({
     },
 });
 
-var EventComponent = Vue.extend({    
+var EventComponent = Vue.extend({
     created: function() {
         this.$on('status-changed', function(ev_id, is_active){
             if(ev_id == this.event_id){
@@ -87,6 +87,7 @@ var roll = null;
 
 $(document).ready(function(){
     var self = this;
+    $("#noscript").hide();
     $("#placeholder").show();
 
     $.ajax('list/events', {
@@ -160,7 +161,7 @@ $(document).ready(function(){
                                 console.log('Filter changed:' + this.filter_by.text + ' in ' + this.filter_by.category);
                                 this.$broadcast('filter-changed');
                             })
-                        } 
+                        }
                     });
                 }});
         }
