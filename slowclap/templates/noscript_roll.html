@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/static/css/bootstrap.css" rel="stylesheet" type="text/css" />
+
+    <title>Event roll</title>
+    <style>
+    body {
+        font-family: Helvetica Neue, Arial, sans-serif;
+    }
+
+    tr.done {
+        text-decoration: line-through;
+        color: red;
+    }
+
+    td.event-start {
+        text-align: center;
+        width: 10%;
+    }
+
+    .hidden {
+      display: none;
+      visibility: hidden;
+    }
+
+    .panel-heading .accordion-toggle:after {
+        /* symbol for "opening" panels */
+        font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+        content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+        float: right;        /* adjust as needed */
+        color: grey;         /* adjust as needed */
+    }
+    .panel-heading .accordion-toggle.collapsed:after {
+        /* symbol for "collapsed" panels */
+        content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+    }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="roll">
+        <div class="panel-group accordion">
+          {% for block in blocks %}
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">{{ block.name }}</h4>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                  <table class="table table-condensed table-responsive table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Категория</th>
+                        <th>Время начала</th>
+                        <th>Наименование</th>
+                      </tr>
+                    </thead>
+                    {% for event in block.events %}
+                    <tr id="event-{{ event_id }}">
+                      <td class="event-category">{{ event.category }}</td>
+                      <td class="event-start">{{ event.start  }}</td>
+                      <td class="event-name">{{ event.name }}</td>
+                    </tr>
+                    {% endfor %}
+                  </table>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
