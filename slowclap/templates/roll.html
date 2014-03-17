@@ -24,6 +24,23 @@
       visibility: hidden;
     }
 
+    th {
+      text-align: center;
+    }
+
+    td {
+      text-align: center;
+    }
+
+    .panel-body {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .panel-body > table {
+       margin-bottom: 0px;
+    }
+
     .panel-heading .accordion-toggle:after {
         /* symbol for "opening" panels */
         font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
@@ -71,7 +88,7 @@
         </nav>
 
         <div class="panel-group accordion">
-          <div v-repeat="blocks" v-component="event-block" class="{{ filtered_out ? 'hidden' : ''}}">
+          <div v-repeat="blocks" v-component="event-block" class="{{ filtered_out ? 'hidden' : ''}}" style="margin-bottom: 10px">
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
@@ -81,19 +98,11 @@
               <div id="collapse{{ block_id }}" class="panel-collapse collapse in">
                 <div class="panel-body">
                   <table class="table table-condensed table-responsive table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Категория</th>
-                        <th>Время начала</th>
-                        <th>Наименование</th>
-                        <th>Номер в конкурсе</th>
-                      </tr>
-                    </thead>
                     <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
-                      <td class="event-category">{{ category }}</td>
-                      <td class="event-start">{{ start | hourmin }}</td>
-                      <td class="event-name">{{ name }}</td>
-                      <td class="event-number">{{ number }}</td>
+                      <td class="col-sm-2">{{ category }}</td>
+                      <td class="col-sm-2">{{ start | hourmin }}</td>
+                      <td class="col-sm-10">{{ name }} {{ number ? '[#' + number + ']' : '' }}</td>
+                      <!--<td class="col-sm-2">{{ number ? number }</td>-->
                     </tr>
                   </table>
                 </div>
