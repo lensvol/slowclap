@@ -1,3 +1,5 @@
+{% load tz %}
+
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,6 +26,23 @@
       visibility: hidden;
     }
 
+    th {
+      text-align: center;
+    }
+
+    td {
+      text-align: center;
+    }
+
+    .panel-body {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    .panel-body > table {
+       margin-bottom: 0px;
+    }
+
     .panel-heading .accordion-toggle:after {
         /* symbol for "opening" panels */
         font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
@@ -35,6 +54,7 @@
         /* symbol for "collapsed" panels */
         content: "\e080";    /* adjust as needed, taken from bootstrap.css */
     }
+
 
     </style>
   </head>
@@ -50,18 +70,11 @@
               <div id="collapseOne" class="panel-collapse collapse in">
                 <div class="panel-body">
                   <table class="table table-condensed table-responsive table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Категория</th>
-                        <th>Время начала</th>
-                        <th>Наименование</th>
-                      </tr>
-                    </thead>
-                    {% for event in block.events %}
+                     {% for event in block.events %}
                     <tr id="event-{{ event_id }}">
-                      <td class="event-category">{{ event.category }}</td>
-                      <td class="event-start">{{ event.start  }}</td>
-                      <td class="event-name">{{ event.name }}</td>
+                      <td class="col-sm-2">{{ event.category }}</td>
+                      <td class="col-sm-2">{{ event.start }}</td>
+                      <td class="col-sm-10">{{ event.name }}</td>
                     </tr>
                     {% endfor %}
                   </table>
