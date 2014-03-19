@@ -1,6 +1,6 @@
 function EventBlock(block_id, name,  start, events) {
     this.name = name;
-    this.start = start;
+    this.start = new Date(start);
     this.events = events;
     this.block_id = block_id
 
@@ -42,24 +42,31 @@ var BlockComponent = Vue.extend({
         this.$on('filter-changed', function(){
             var flt = this.$root.filter_by;
 
-            this.events.replace(function(item){
-                if((flt.category && flt.category != item.category && flt.category != 'Все категории')
-                    || (flt.text && item.name.toLowerCase().indexOf(flt.text.toLowerCase()) == -1))
-                {
-                    item.hidden = true;
-                }else{
-                    item.hidden = false;
-                }
-                return item;
-            });
+            // JavaScript is weird :( Hack to compare two dates.
+            filtered_by_date = (this.start.setHours(0,0,0,0) == flt.date.setHours(0,0,0,0));
+            if(filtered_by_date){
+                this.events.replace(function(item){
+                    if((flt.category && flt.category != item.category && flt.category != 'Все категории')
+                        || (flt.text && item.name.toLowerCase().indexOf(flt.text.toLowerCase()) == -1))
+                    {
+                        item.hidden = true;
+                    }else{
+                        item.hidden = false;
+                    }
+                    return item;
+                });
 
-            var count = this.events.length;
-            for(var i = 0; i < this.events.length; i++){
-                if(this.events[i].hidden){
-                    count--;
+                var count = this.events.length;
+                for(var i = 0; i < this.events.length; i++){
+                    if(this.events[i].hidden){
+                        count--;
+                    }
                 }
+            
+                this.filtered_out = (count == 0)
+            }else{
+                this.filtered_out = true
             }
-            this.filtered_out = count == 0;
         });
     },
 });
@@ -84,7 +91,18 @@ Vue.filter('hourmin', function(value){
 
     return (hour < 10 ? "0" + hour : hour) + ":" +
            (minutes < 10 ? "0" + minutes : minutes)
+});
+Vue.filter('shortdate', function(value){
+    day = value.getUTCDate();
+    month = value.getMonth();
+    months = ["Январь", "Февраль", "Март", "Апрель", "Ма",
+              "Июнь", "Июль", "Август", "Сентябрь", "Октябрь",
+              "Ноябрь", "Декабрь"];
+
+    return months[month] + ', ' + day
 })
+
+
 
 var roll = null;
 
@@ -98,6 +116,7 @@ $(document).ready(function(){
             self.events = {};
             self.blocks = {};
             self.categories = {};
+            self.dates = [];
 
             for(var i= 0; i < events.length; i++){
                 ev = events[i];
@@ -120,6 +139,7 @@ $(document).ready(function(){
             $.ajax('list/program', {
                  success: function(by_blocks){
                     event_blocks = [];
+                    dates = [];
                     var by_start_date = function(a, b){
                         return a.start - b.start
                     }
@@ -132,19 +152,21 @@ $(document).ready(function(){
                                 in_block.push(self.events[event_ids[b_i]]);
                             }
                             event_blocks.push(new EventBlock(key, block_def.name, block_def.start, in_block));
+                            self.dates.push(new Date(block_def.start));
                         }
-                    }
+                    }                    
                     event_blocks = event_blocks.sort(by_start_date);
-
                     roll = new Vue({
                         el: "#roll",
                         data: {
                             blocks: event_blocks,
                             categories: self.categories,
+                            dates: self.dates,
                             text_filter: null,
                             filter_by: {
                                 category: 'Все категории',
-                                text: null
+                                text: null,
+                                date: null
                             }
                         },
                         methods: {
@@ -156,16 +178,23 @@ $(document).ready(function(){
                             },
                             filterByText: function(){
                                 this.filter_by.text = this.text_filter;
+                            },
+                            filterByDate: function(date) {                                
+                                this.filter_by.date = date;
                             }
                         },
+                        created: function(){
+                            this.$watch('filter_by', function(){
+                                console.log('Filter changed:' + this.filter_by.text + ' in ' + this.filter_by.category + ' on ' + this.filter_by.date);
+                                this.$broadcast('filter-changed');
+                            });                            
+                            this.filter_by.date = this.dates[0];
+                        },
                         ready: function(){
+                            this.$broadcast('filter-changed');
                             console.log('Ok!');
                             $("#placeholder").hide();
                             $('#roll').show();
-                            this.$watch('filter_by', function(){
-                                console.log('Filter changed:' + this.filter_by.text + ' in ' + this.filter_by.category);
-                                this.$broadcast('filter-changed');
-                            })
                         }
                     });
                 }});
