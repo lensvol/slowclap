@@ -38,8 +38,11 @@ class Event(models.Model):
                                  verbose_name=u'Категория',
                                  null=True,
                                  default=None)
-    ord = models.IntegerField(verbose_name=u'Номер в блоке', null=True)
-    number = models.IntegerField(verbose_name=u'Номер в конкурсе', null=True)
+    ord = models.IntegerField(verbose_name=u'Номер в блоке', 
+                              null=True)
+    number = models.IntegerField(verbose_name=u'Номер в конкурсе', 
+                                 null=True,
+                                 blank=True)
     description = models.CharField(max_length=255,
                                    verbose_name=u'Описание',
                                    null=False,
