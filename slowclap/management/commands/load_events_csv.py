@@ -5,7 +5,7 @@ import datetime
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.timezone import get_current_timezone
 
-from slowclap.performances.models import Category, ActionBlock, Event
+from slowclap.models import Category, ActionBlock, Event
 
 class Command(BaseCommand):
     args = '<csv_file> <start date>'

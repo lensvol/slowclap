@@ -24,6 +24,7 @@ setup(
     packages=[
         'slowclap',
         'slowclap.migrations',
+        'slowclap.management',
         'slowclap.management.commands'
     ],
     package_dir={'slowclap': 'slowclap'},
