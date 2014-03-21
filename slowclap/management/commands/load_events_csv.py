@@ -22,7 +22,7 @@ class Command(BaseCommand):
             lines = [[c.decode('cp1251') for c in l] for l in reader]
 
         count = 0
-        for (category, pos, name, duration, block, day) in lines:
+        for (category, category_pos, name, duration, block, day) in lines:
             if category:
                 category_rec, _ = Category.objects.get_or_create(name=category)
             else:
@@ -42,6 +42,7 @@ class Command(BaseCommand):
             cur_ord = events_in_block.get(block, 0) + 1
             event, cr = Event.objects.get_or_create(category=category_rec,
                                                     block=block_rec,
+                                                    number=category_pos or None,
                                                     ord=cur_ord,
                                                     duration=duration_sec,
                                                     description=name.replace(u'\n', u' / '))

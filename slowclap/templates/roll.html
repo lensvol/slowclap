@@ -98,7 +98,7 @@
             <div class="panel panel-default">
               <div class="panel-heading">
                 <h4 class="panel-title">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ block_id }}">{{ name }}</a>
+                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ block_id }}">{{ name }} <b>[{{ start | hourmin }}]</b></a>
                 </h4>
               </div>
               <div id="collapse{{ block_id }}" class="panel-collapse collapse in">
@@ -107,7 +107,7 @@
                     <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
                       <td class="col-sm-2">{{ category }}</td>
                       <td class="col-sm-2">{{ start | hourmin }}</td>
-                      <td class="col-sm-10">{{ name }} {{ number ? '[#' + number + ']' : '' }}</td>
+                      <td class="col-sm-10">{{ name }} <b>{{ number ? '[#' + number + ']' : '' }}</b></td>
                       <!--<td class="col-sm-2">{{ number ? number }</td>-->
                     </tr>
                   </table>
