@@ -152,9 +152,17 @@ $(document).ready(function(){
                                 in_block.push(self.events[event_ids[b_i]]);
                             }
                             event_blocks.push(new EventBlock(key, block_def.name, block_def.start, in_block));
-                            self.dates.push(new Date(block_def.start));
+                            
+                            day_start = new Date(block_def.start);
+                            ts = day_start.setHours(0, 0, 0, 0);
+                            if(dates.indexOf(ts) == -1){
+                                dates.push(ts);
+                            }
                         }
-                    }                    
+                    }
+                    self.dates = dates.map(function(ts, ind, arr){ 
+                        return new Date(ts)
+                    });
                     event_blocks = event_blocks.sort(by_start_date);
                     roll = new Vue({
                         el: "#roll",
