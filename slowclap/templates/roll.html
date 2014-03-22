@@ -56,8 +56,12 @@
     @media (min-width: 768px) {
       .navbar-default .navbar-form {
         width: 40%;
-        padding-bottom: 10px;
       }
+    }
+
+    .vertical > td {
+      display: inline-block !important;
+      vertical-align: middle !important;
     }
     </style>
   </head>
@@ -115,11 +119,10 @@
               <div id="collapse{{ block_id }}" class="panel-collapse collapse in">
                 <div class="panel-body">
                   <table class="table table-condensed table-responsive table-bordered">
-                    <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }}">
-                      <td class="col-sm-2">{{ category }}</td>
+                    <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }} vertical">
+                      <td class="col-sm-2">{{ category }} <b>{{ number ? '[#' + number + ']' : '' }}</b></td>
                       <td class="col-sm-2">{{ start | hourmin }}</td>
-                      <td class="col-sm-10">{{ name }} <b>{{ number ? '[#' + number + ']' : '' }}</b></td>
-                      <!--<td class="col-sm-2">{{ number ? number }</td>-->
+                      <td class="col-sm-10">{{ name }}</td>
                     </tr>
                   </table>
                 </div>
