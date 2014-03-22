@@ -53,6 +53,12 @@
         content: "\e080";    /* adjust as needed, taken from bootstrap.css */
     }
 
+    @media (min-width: 768px) {
+      .navbar-default .navbar-form {
+        width: 40%;
+        padding-bottom: 10px;
+      }
+    }
     </style>
   </head>
   <body>
@@ -67,9 +73,15 @@
     <div class="container">
       <div id="roll" style="display: none">
         <nav class="navbar navbar-default" role="navigation">
-          <div id="filter-navbar">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#filter-navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          <div class="collapse navbar-collapse" id="filter-navbar">
             <ul class="nav navbar-nav">
-              <li class="dropdown">
+              <li class="dropdown user-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span v-text="filter_by.category"></span> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="#" v-on="click:clearCategoryFilter()">Все категории</a></li>
@@ -83,14 +95,13 @@
                 </ul>
               </li>
             </ul>
-            <form class="navbar-form navbar-left" role="search" v-on="submit:filterByText" action="#">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Поиск" v-model="text_filter" v-on="keydown:submit | key enter">
-              </div>
-              <button type="submit" class="btn btn-default">Поиск</button>
-            </form>
+            <div class="input-group">
+              <input type="text" class="form-control" v-on="keydown:filterByText | key enter" placeholder="Поиск" v-model="text_filter">
+              <span class="input-group-btn">
+                <button class="btn btn-default" v-on="click:filterByText" type="submit" >Поиск</button>
+              </span>
+            </div>
 
-          </div>
         </nav>
 
         <div class="panel-group accordion">

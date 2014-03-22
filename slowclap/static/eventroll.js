@@ -185,7 +185,6 @@ $(document).ready(function(){
                                 this.filter_by.category = 'Все категории';
                             },
                             filterByText: function(e){
-                                e.preventDefault();
                                 this.filter_by.text = this.text_filter;
                             },
                             filterByDate: function(date) {
