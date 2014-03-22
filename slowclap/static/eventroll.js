@@ -184,12 +184,13 @@ $(document).ready(function(){
                             clearCategoryFilter: function(){
                                 this.filter_by.category = 'Все категории';
                             },
-                            filterByText: function(){
+                            filterByText: function(e){
+                                e.preventDefault();
                                 this.filter_by.text = this.text_filter;
                             },
                             filterByDate: function(date) {
                                 this.filter_by.date = date;
-                            }
+                            },
                         },
                         created: function(){
                             this.$watch('filter_by', function(){
