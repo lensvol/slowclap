@@ -1,6 +1,6 @@
 #coding: utf-8
 
-from django.db import models
+from django.db import models, transaction
 
 
 class ActionBlock(models.Model):
@@ -38,9 +38,9 @@ class Event(models.Model):
                                  verbose_name=u'Категория',
                                  null=True,
                                  default=None)
-    ord = models.IntegerField(verbose_name=u'Номер в блоке', 
+    ord = models.IntegerField(verbose_name=u'Номер в блоке',
                               null=True)
-    number = models.IntegerField(verbose_name=u'Номер в конкурсе', 
+    number = models.IntegerField(verbose_name=u'Номер в конкурсе',
                                  null=True,
                                  blank=True)
     description = models.CharField(max_length=255,
@@ -52,6 +52,18 @@ class Event(models.Model):
 
     def __unicode__(self):
         return self.description
+
+    def save(self, **args):
+        with transaction.atomic():
+            next_events = Event.objects.filter(ord__gte=self.ord,
+                                               block=self.block)\
+                                       .order_by('ord')
+
+            for ind, event in enumerate(next_events):
+                event.ord = self.ord + ind + 1
+                super(Event, event).save()
+
+        super(Event, self).save(**args)
 
     class Meta:
         verbose_name = u'Выступление'
