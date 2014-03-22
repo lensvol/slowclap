@@ -30,8 +30,9 @@ setup(
     package_dir={'slowclap': 'slowclap'},
     include_package_data=True,
     install_requires=[
-	    'Django>=1.5.5',
+        'Django>=1.5.5',
         'south',
+        'pytz',
         'djangorestframework',
         'markdown',
         'django-filter'
