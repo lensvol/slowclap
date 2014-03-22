@@ -62,7 +62,7 @@ var BlockComponent = Vue.extend({
                         count--;
                     }
                 }
-            
+
                 this.filtered_out = (count == 0)
             }else{
                 this.filtered_out = true
@@ -93,7 +93,7 @@ Vue.filter('hourmin', function(value){
            (minutes < 10 ? "0" + minutes : minutes)
 });
 Vue.filter('shortdate', function(value){
-    day = value.getUTCDate();
+    day = value.getDate();
     month = value.getMonth();
     months = ["Январь", "Февраль", "Март", "Апрель", "Ма",
               "Июнь", "Июль", "Август", "Сентябрь", "Октябрь",
@@ -152,7 +152,7 @@ $(document).ready(function(){
                                 in_block.push(self.events[event_ids[b_i]]);
                             }
                             event_blocks.push(new EventBlock(key, block_def.name, block_def.start, in_block));
-                            
+
                             day_start = new Date(block_def.start);
                             ts = day_start.setHours(0, 0, 0, 0);
                             if(dates.indexOf(ts) == -1){
@@ -160,7 +160,7 @@ $(document).ready(function(){
                             }
                         }
                     }
-                    self.dates = dates.map(function(ts, ind, arr){ 
+                    self.dates = dates.map(function(ts, ind, arr){
                         return new Date(ts)
                     });
                     event_blocks = event_blocks.sort(by_start_date);
@@ -187,7 +187,7 @@ $(document).ready(function(){
                             filterByText: function(){
                                 this.filter_by.text = this.text_filter;
                             },
-                            filterByDate: function(date) {                                
+                            filterByDate: function(date) {
                                 this.filter_by.date = date;
                             }
                         },
@@ -195,7 +195,7 @@ $(document).ready(function(){
                             this.$watch('filter_by', function(){
                                 console.log('Filter changed:' + this.filter_by.text + ' in ' + this.filter_by.category + ' on ' + this.filter_by.date);
                                 this.$broadcast('filter-changed');
-                            });                            
+                            });
                             this.filter_by.date = this.dates[0];
                         },
                         ready: function(){
