@@ -24,11 +24,7 @@
       visibility: hidden;
     }
 
-    th {
-      text-align: center;
-    }
-
-    td {
+    td.centered {
       text-align: center;
     }
 
@@ -60,22 +56,47 @@
     }
 
     .vertical > td {
-      display: inline-block !important;
-      vertical-align: middle !important;
+        display: inline-block !important;
+        vertical-align: middle !important;
     }
+
+    .block {
+        text-align: center;
+        margin: 20px;
+    }
+
+    .block:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -0.25em; /* Adjusts for spacing */
+    }
+
+    .centered {
+        display: inline-block;
+        vertical-align: middle;
+        width: 300px;
+        padding: 10px 15px;
+    }
+
     </style>
   </head>
   <body>
-    <div id="noscript">
+    <noscript>
     К сожалению, ваш браузер не поддерживает Javascript. Для просмотра программы
     вам необходимо перейти <a href="{% url 'slowclap.views.noscript_roll' %}">по этой ссылке</a>.
-    </div>
+    </noscript>
 
     {% verbatim %}
-    <div id="placeholder" style="display: none">Подождите, выполняется загрузка программы...</div>
+    <div class="block" id="placeholder">
+      <div class="centered">
+        <img src="/static/loading-spinning-bubbles.svg" width="64" height="64" />
+      </div>
+    </div>
 
-    <div class="container">
-      <div id="roll" style="display: none">
+    <div class="container" style="display: none" id="main">
+      <div id="roll">
         <nav class="navbar navbar-default" role="navigation">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#filter-navbar">
               <span class="sr-only">Toggle navigation</span>
@@ -120,9 +141,9 @@
                 <div class="panel-body">
                   <table class="table table-condensed table-responsive table-bordered">
                     <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }} vertical">
-                      <td class="col-sm-2">{{ category }} <b>{{ number ? '[#' + number + ']' : '' }}</b></td>
-                      <td class="col-sm-2">{{ start | hourmin }}</td>
-                      <td class="col-sm-10">{{ name }}</td>
+                      <td class="col-sm-2 centered">{{ category }} <b>{{ number ? '[#' + number + ']' : '' }}</b></td>
+                      <td class="col-sm-2 centered">{{ start | hourmin }}</td>
+                      <td class="col-sm-10 centered">{{ name }}</td>
                     </tr>
                   </table>
                 </div>

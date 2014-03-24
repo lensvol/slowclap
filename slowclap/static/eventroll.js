@@ -4,6 +4,11 @@ function EventBlock(block_id, name,  start, events) {
     this.events = events;
     this.block_id = block_id
 
+    console.log("Block " + block_id + " starts on " + start);
+    console.log("Date: " + this.start);
+    m = moment(start)
+    console.log("Moment date: " + m.format())
+
     this.filtered_out = false;
 
     this.recalculate();
@@ -86,11 +91,8 @@ var EventComponent = Vue.extend({
 Vue.component('event', EventComponent);
 Vue.component('event-block', BlockComponent);
 Vue.filter('hourmin', function(value){
-    hour = value.getHours();
-    minutes = value.getMinutes();
-
-    return (hour < 10 ? "0" + hour : hour) + ":" +
-           (minutes < 10 ? "0" + minutes : minutes)
+    var m = moment(value).tz("Europe/Moscow");
+    return m.format("hh:mm");
 });
 Vue.filter('shortdate', function(value){
     return moment.unix(value).format("MMM, D")
@@ -238,7 +240,7 @@ $(document).ready(function(){
                             this.$broadcast('filter-changed');
                             console.log('VM is ready.');
                             $("#placeholder").hide();
-                            $('#roll').show();
+                            $('#main').show();
                         }
                     });
                 }});
