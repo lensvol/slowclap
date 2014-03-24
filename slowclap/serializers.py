@@ -2,22 +2,22 @@
 
 from rest_framework import serializers
 
-from slowclap.models import Event, Category, ActionBlock 
+from slowclap.models import Event, Category, ActionBlock
 
 
 class ActionBlockSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = ActionBlock
+    class Meta:
+        model = ActionBlock
 
 
 class CategorySerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Category
+    class Meta:
+        model = Category
 
 
 class EventSerializer(serializers.ModelSerializer):
-	category = CategorySerializer()
-	block = ActionBlockSerializer(required=False)
+    category = CategorySerializer()
+    block = ActionBlockSerializer(required=False)
 
-	class Meta:
-		model = Event
+    class Meta:
+        model = Event
