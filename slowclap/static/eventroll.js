@@ -91,8 +91,8 @@ var EventComponent = Vue.extend({
 Vue.component('event', EventComponent);
 Vue.component('event-block', BlockComponent);
 Vue.filter('hourmin', function(value){
-    var m = moment(value).tz("Europe/Moscow");
-    return m.format("hh:mm");
+    var m = moment(value);
+    return m.format("HH:mm");
 });
 Vue.filter('shortdate', function(value){
     return moment.unix(value).format("MMM, D")
