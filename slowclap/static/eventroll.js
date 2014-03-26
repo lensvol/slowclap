@@ -186,7 +186,7 @@ function loadEvents(callback){
                 ev = events[i];
                 event_map[ev.id] = new Event(
                     "event_" + ev.id,
-                    ev.category ? ev.category.name : "",
+                    ev.category,
                     ev.description,
                     ev.duration,
                     ev.number);
@@ -252,6 +252,16 @@ $(document).ready(function(){
             blocks = r[1],
             events = r[2],
             program = r[3];
+
+            for(ev_id in events){
+                ev = events[ev_id];
+                if(categories.hasOwnProperty(ev.category)){
+                    ev.category = categories[ev.category].name;
+                }
+                if(ev.block){
+                    ev.block = blocks[ev.block].name;
+                }
+            }
 
             console.log("Ordering events according to program...");
 
