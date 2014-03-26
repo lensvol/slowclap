@@ -80,6 +80,11 @@
         padding: 10px 15px;
     }
 
+    .misaligned {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
     </style>
   </head>
   <body>
@@ -120,13 +125,13 @@
                 </ul>
               </li>
             </ul>
-            <div class="input-group">
+            <div class="input-group misaligned">
               <input type="text" class="form-control" v-on="keydown:filterByText | key enter" placeholder="Поиск" v-model="text_filter">
               <span class="input-group-btn">
                 <button class="btn btn-default" v-on="click:filterByText" type="submit" >Поиск</button>
               </span>
             </div>
-
+          </div>
         </nav>
 
         <div class="panel-group accordion">
