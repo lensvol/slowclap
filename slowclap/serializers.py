@@ -16,8 +16,5 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-    block = ActionBlockSerializer(required=False)
-
     class Meta:
         model = Event

@@ -1,6 +1,9 @@
 #coding: utf-8
 
 from django.db import models, transaction
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.core.cache import cache
 
 
 class ActionBlock(models.Model):
@@ -58,12 +61,13 @@ class Event(models.Model):
             next_events = Event.objects.filter(ord__gte=self.ord,
                                                block=self.block)\
                                        .order_by('ord')
-
             for ind, event in enumerate(next_events):
                 event.ord = self.ord + ind + 1
                 super(Event, event).save()
-
         super(Event, self).save(**args)
+
+        # Bust the cache of dependent views
+        cache.clear()
 
     class Meta:
         verbose_name = u'Выступление'
