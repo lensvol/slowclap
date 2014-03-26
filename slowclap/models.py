@@ -67,7 +67,7 @@ class Event(models.Model):
         super(Event, self).save(**args)
 
         # Bust the cache of dependent views
-        cache.delete('/list/program')
+        cache.clear()
 
     class Meta:
         verbose_name = u'Выступление'
