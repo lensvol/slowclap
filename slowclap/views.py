@@ -136,11 +136,12 @@ class CachedResourceMixin(object):
     def respond_from_cache(self, cached_data):
         # Given some cached data, construct a response.
         content, status, headers = cached_data
-        response = Response(content, status=status, headers=dict(headers))
-        return response
+        return HttpResponse(content, content_type="application/json")
+
 
     def cache_response(self, key, response):
-        data = response.data
+        response.render()
+        data = response.content
         status = response.status_code
         headers = response.items()
 
