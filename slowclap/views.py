@@ -6,6 +6,7 @@ import pytz
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.utils.timezone import get_current_timezone
+from django.core.cache import cache
 
 from rest_framework import generics
 from slowclap.models import Event, ActionBlock
@@ -43,11 +44,18 @@ def noscript_roll(request):
 
 
 def list_program(request):
+    cached_program = cache.get('/list/program')
+    if cached_program:
+        return HttpResponse(cached_program, content_type='application/json')
+
     blocks = ActionBlock.objects.all()
     result = {}
 
     for block in blocks:
         result[block.id] = [ev.id for ev in block.event_set.order_by('ord')]
+
+    content = json.dumps(result, indent=4)
+    cache.set('/list/program', content)
 
     return HttpResponse(json.dumps(result, indent=4), content_type='application/json')
 
