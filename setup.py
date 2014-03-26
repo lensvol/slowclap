@@ -35,7 +35,8 @@ setup(
         'pytz',
         'djangorestframework',
         'markdown',
-        'django-filter'
+        'django-filter',
+        'mock'
     ],
     license="MIT",
     zip_safe=False,
