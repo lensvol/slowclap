@@ -145,7 +145,7 @@
               <div id="collapse{{ block_id }}" class="panel-collapse collapse in">
                 <div class="panel-body">
                   <table class="table table-condensed table-responsive table-bordered">
-                    <tr v-repeat="events" v-component="event" id="event-{{ event_id }}" class="{{ hidden ? 'hidden' : '' }} vertical">
+                    <tr v-repeat="events" v-component="event" id="{{ event_id }}" class="{{ hidden ? 'hidden' : '' }} vertical">
                       <td class="col-sm-2 centered">{{ category }} <b>{{ number ? '[#' + number + ']' : '' }}</b></td>
                       <td class="col-sm-2 centered">{{ start | hourmin }}</td>
                       <td class="col-sm-10 centered">{{ name }}</td>
