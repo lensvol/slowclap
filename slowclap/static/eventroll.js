@@ -147,7 +147,12 @@ function loadCategories(callback){
     $.ajax('/program/list/categories', {
         success: function(categories){
             console.log("Retrieved " + categories.length + " categories from server.");
-            callback(null, categories);
+            categories_map = {};
+            for(key in categories){
+                cat = categories[key];
+                categories_map[cat.id] = cat;
+            };
+            callback(null, categories_map);
         }
     });
 };
