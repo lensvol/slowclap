@@ -142,7 +142,7 @@ Vue.filter('shortdate', function(value){
 })
 
 function loadCategories(callback){
-    $.ajax('list/categories', {
+    $.ajax('/program/list/categories', {
         success: function(categories){
             console.log("Retrieved " + categories.length + " categories from server.");
             callback(null, categories);
@@ -151,7 +151,7 @@ function loadCategories(callback){
 };
 
 function loadBlocks(callback){
-    $.ajax('list/blocks', {
+    $.ajax('/program/list/blocks', {
         success: function(blocks){
             console.log("Retrieved " + blocks.length + " blocks from server.");
 
@@ -167,7 +167,7 @@ function loadBlocks(callback){
 };
 
 function loadProgram(callback){
-    $.ajax('list/program', {
+    $.ajax('/program/list/program', {
         success: function(program){
             console.log("Retrieved program from server.");
             callback(null, program);
@@ -176,7 +176,7 @@ function loadProgram(callback){
 };
 
 function loadEvents(callback){
-    $.ajax('list/events', {
+    $.ajax('/program/list/events', {
         success: function(events){
             console.log("Retrieved " + events.length + " events from server.");
 
