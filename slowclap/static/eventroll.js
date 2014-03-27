@@ -238,10 +238,18 @@ function displayVM(categories, dates, blocks){
                 console.log('Filter changed: "' + (this.filter_by.text || "") + '" in ' + this.filter_by.category + ' on ' + this.filter_by.date);
                 this.$broadcast('filter-changed');
             });
-            this.filter_by.date = this.dates[0];
+
+            day_number = 0;
+            if(window.location.hash && window.location.hash.length == 5){
+                var d = parseInt(window.location.hash.slice(4));
+                if(d && d - 1 < this.dates.length){
+                    day_number = d - 1;
+                }
+            }
+
+            this.filter_by.date = this.dates[day_number];
         },
         ready: function(){
-            this.$broadcast('filter-changed');
             console.log('VM is ready.');
             $("#placeholder").hide();
             $('#main').show();
