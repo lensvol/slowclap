@@ -1,3 +1,4 @@
+moment.lang("ru");
 moment.tz.add({
     "zones": {
         "Europe/Moscow": [
