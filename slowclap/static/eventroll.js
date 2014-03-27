@@ -138,7 +138,8 @@ Vue.filter('hourmin', function(value){
     return m.format("HH:mm");
 });
 Vue.filter('shortdate', function(value){
-    return moment.unix(value).format("MMM, D")
+    var str = moment.unix(value).format("MMM, D")
+    return str.charAt(0).toUpperCase() + str.slice(1);
 })
 
 function loadCategories(callback){
@@ -284,9 +285,6 @@ $(document).ready(function(){
                     }
                 }
             }
-
-        $("#noscript").hide();
-        $("#placeholder").show();
 
         displayVM(categories, dates, event_blocks);
     })
